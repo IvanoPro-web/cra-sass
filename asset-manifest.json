@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/cra-sass/static/css/main.e034c306.css",
+    "main.js": "/cra-sass/static/js/main.983b777a.js",
+    "static/media/space-main.svg": "/cra-sass/static/media/space-main.ea55d765e744f8efdd66.svg",
+    "static/media/earth.svg": "/cra-sass/static/media/earth.9f353434555142907265.svg",
+    "static/media/rocket.svg": "/cra-sass/static/media/rocket.b48f5adb6bec266845d735799f35b7a8.svg",
+    "static/media/stars.svg": "/cra-sass/static/media/stars.13a7300273e4251c8435.svg",
+    "static/media/dreams.svg": "/cra-sass/static/media/dreams.de5ba5a6d5943f5a5496.svg",
+    "static/media/move.svg": "/cra-sass/static/media/move.d861c4543f3152ffc7e6.svg",
+    "static/media/space.svg": "/cra-sass/static/media/space.7e471c662d1e1dcd50c4.svg",
+    "static/media/logoText.svg": "/cra-sass/static/media/logoText.4fbacc58b56f6408b4f7401ef14ed00a.svg",
+    "static/media/logoIcon.svg": "/cra-sass/static/media/logoIcon.a1353e19301507fbd1a8242c18e3759a.svg",
+    "static/media/cart.svg": "/cra-sass/static/media/cart.b1b924c95204531617dd.svg",
+    "index.html": "/cra-sass/index.html",
+    "main.e034c306.css.map": "/cra-sass/static/css/main.e034c306.css.map",
+    "main.983b777a.js.map": "/cra-sass/static/js/main.983b777a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e034c306.css",
+    "static/js/main.983b777a.js"
+  ]
+}
