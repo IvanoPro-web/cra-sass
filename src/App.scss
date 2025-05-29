@@ -1,0 +1,755 @@
+@use 'sass:map';
+@use 'sass:string';
+
+$space-color: #FF70D9;
+$emphasis-color: #EBFF00;
+$highlight-color: #304571;
+$dark-imperial-blue: #0D1E48;
+$text-color: #FFFFFF;
+$background-color: #000000;
+
+$gradient-background: linear-gradient(180deg, $dark-imperial-blue, $highlight-color);
+
+$font-size-xs: 0.875rem;   
+$font-size-sm: 1rem;       
+$font-size-md: 1.125rem;   
+$font-size-lg: 1.25rem;   
+$font-size-lgn: 1.375rem;   
+$font-size-xl: 1.5rem;     
+
+$font-size-heading-sm: 1.625rem;  
+$font-size-heading-md: 2rem;    
+$font-size-heading-mdn: 2.25rem;    
+$font-size-heading-lg: 2.5rem;    
+$font-size-heading-xl: 4.625rem;  
+
+$font-size-h1-sm: 3rem;   
+$font-size-h1-lg: 4.5rem; 
+
+$box-shadow-default: 0 4px 6px rgb(0 0 0 / 10%);
+$breakpoints: (sm: 360px, md: 768px, lg: 1248px );
+
+$earth: url(../src/assets/images/earth.svg);
+$space-main: url(../src/assets/images/space-main.svg);
+$move: url(../src/assets/images/move.svg);
+$space: url(../src/assets/images/space.svg);
+$stars: url(../src/assets/images/stars.svg);
+$dreams: url(../src/assets/images/dreams.svg);
+$cart: url(../src/assets/images/cart.svg);
+
+@mixin font-style($size, $weight: 700, $align: start, $line-height: normal) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+  text-align: $align;
+}
+
+@mixin flex-center($direction: row, $justify-content: center) {
+  display: flex;
+  justify-content: $justify-content;
+  align-items: center;
+  flex-direction: $direction;
+}
+
+@mixin respond-to($breakpoint) {
+  @media (min-width: map.get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+@mixin container($max-width: 1248px, $width: 100%, $margin: 0 auto) {
+  width: $width;
+  max-width: $max-width;
+  margin: $margin;
+}
+
+@mixin background-layer(
+  $image,
+  $position: center,
+  $size: cover,
+  $repeat: no-repeat,
+  $bg-color: $highlight-color,
+  $overlay: true,
+  $overlay-color: rgba(0, 0, 0, 0.4)
+) {
+  @if $overlay {
+    background: linear-gradient($overlay-color, $overlay-color), $image $position / $size $repeat, $bg-color;
+  } @else {
+    background: $image $position / $size $repeat, $bg-color;
+  }
+}
+
+@mixin background-planet-layer(
+  $first-image,
+  $first-x: center,
+  $first-y: center,
+  $first-size: contain,
+  $first-repeat: no-repeat
+) {
+  background: image-set($first-image) string.unquote($first-x)
+    string.unquote($first-y) / string.unquote($first-size)
+    string.unquote($first-repeat);
+}
+
+@mixin gradient-bg(
+  $angle,
+  $color1,
+  $opacity1,
+  $pos1,
+  $color2,
+  $opacity2,
+  $pos2
+) {
+  background: linear-gradient(
+    $angle,
+    rgba($color1, $opacity1) $pos1,
+    rgba($color2, $opacity2) $pos2
+  );
+}
+
+@mixin button(
+  $padding: 7px 40px,
+  $text-color: $background-color,
+  $bg-color: $emphasis-color,
+  $border: 1px solid $emphasis-color,
+  $radius: 20px,
+  $cursor: pointer,
+  $align: null,
+  $transition: all 0.3s
+) {
+  padding: $padding;
+  color: $text-color;
+  background: $bg-color;
+  border: $border;
+  border-radius: $radius;
+  cursor: $cursor;
+  transition: $transition;
+
+  @if $align != null {
+    align-self: $align;
+  }
+}
+
+.header {
+  color: $space-color;
+  background-color: $background-color;
+
+  &__container {
+    position: relative;
+    padding: 1rem 10vw 1rem;
+
+    @include container;
+    @include flex-center(row, space-between);
+
+    @include respond-to(md) {
+      padding: 1rem 6vw 1rem;
+    }
+
+    @include respond-to(lg) {
+      padding: 1rem 2vw 1rem;
+    }
+  }
+
+  &__logo {
+    @include flex-center(row, center);
+
+    &-icon {
+      width: 25px;
+      height: 25px;
+      margin-right: 0.2rem;
+
+      @include respond-to(lg) {
+        width: 38px;
+        height: 38px;
+      }
+    }
+
+    &-text {
+      width: 43px;
+      height: 17px;
+
+      @include respond-to(lg) {
+        width: 64px;
+        height: 25px;
+      }
+    }
+  }
+}
+
+.navigation {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  display: none;
+  width: 100%;
+  padding: 3rem;
+  background-color: $background-color;
+  flex-direction: column;
+  gap: 1rem;
+
+  &--open {
+    display: flex;
+  }
+
+  @include respond-to(md) {
+    position: static;
+    width: auto;
+    padding: 0;
+    gap: 2rem;
+
+    @include flex-center(row, flex-end);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    @include respond-to(md) {
+      display: flex;
+      flex-direction: row;
+      gap: 5rem;
+    }
+  }
+
+  &__item {
+    display: flex;
+    width: fit-content;
+    padding-left: 0.5rem;
+    color: $text-color;
+    text-transform: uppercase;
+    gap: 0.5rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    @include font-style($font-size-md, 700, center, normal);
+
+    @include respond-to(md) {
+      padding-left: 0;
+      @include font-style($font-size-lgn, 700, center, normal);
+      text-transform: none;
+    }
+
+    &-link {
+      &:hover {
+        color: transparent;
+
+        @include gradient-bg(
+          140.47deg,
+          $space-color,
+          0.8,
+          26.02%,
+          $emphasis-color,
+          0.8,
+          90.57%
+        );
+        background-clip: text;
+      }
+
+      &:active,
+      &:focus-within {
+        color: transparent;
+
+        @include gradient-bg(
+          140.47deg,
+          $space-color,
+          0.8,
+          26.02%,
+          $emphasis-color,
+          0.8,
+          90.57%
+        );
+        background-clip: text;
+      }
+    }
+  }
+
+  &__symbol {
+    display: flex;
+    align-items: center;
+
+    &-link {
+      &:hover {
+        color: transparent;
+
+        @include gradient-bg(
+          140.47deg,
+          $space-color,
+          0.8,
+          26.02%,
+          $emphasis-color,
+          0.8,
+          90.57%
+        );
+        background-clip: text;
+      }
+
+      &:active,
+      &:focus-within {
+        color: transparent;
+
+        @include gradient-bg(
+          140.47deg,
+          $space-color,
+          0.8,
+          26.02%,
+          $emphasis-color,
+          0.8,
+          90.57%
+        );
+        background-clip: text;
+      }
+    }
+
+    &-text {
+      display: inline-block;
+
+      @include respond-to(md) {
+        display: none;
+      }
+    }
+
+    &-icon {
+      display: none;
+      width: 24px;
+      height: 24px;
+
+      @include respond-to(md) {
+        display: block;
+      }
+
+      &--cart {
+        background: $text-color;
+        mask-image: $cart;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+      }
+
+      .navigation__symbol-link:hover &,
+      .navigation__symbol-link:focus & {
+        @include gradient-bg(
+          140.47deg,
+          $space-color,
+          0.8,
+          26.02%,
+          $emphasis-color,
+          0.8,
+          90.57%
+        );
+      }
+
+      .navigation__symbol-link:focus-within &,
+      .navigation__symbol-link:active & {
+        @include gradient-bg(
+          140.47deg,
+          $space-color,
+          0.8,
+          26.02%,
+          $emphasis-color,
+          0.8,
+          90.57%
+        );
+      }
+    }
+  }
+}
+
+.menu {
+  &__icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 32px;
+    height: 16px;
+    cursor: pointer;
+
+    span {
+      display: block;
+      height: 2px;
+      background-color: $text-color;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    &--active {
+      span:nth-child(1) {
+        transform: rotate(45deg) translateY(8px);
+      }
+
+      span:nth-child(2) {
+        opacity: 0;
+      }
+
+      span:nth-child(3) {
+        transform: rotate(-45deg) translateY(-8px);
+      }
+    }
+
+    @include respond-to(md) {
+      display: none;
+    }
+  }
+}
+
+.main {
+  background: $gradient-background;
+}
+
+.hero {
+  width: 100%;
+  overflow: hidden;
+  background-attachment: fixed;
+
+  @include background-layer($space-main);
+
+  @include respond-to(md) {
+    @include background-layer($space-main);
+  }
+
+  @include respond-to(lg) {
+    @include background-layer($space-main);
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    @include container;
+    @include respond-to(md) {
+      flex-direction: row;
+    }
+
+    @include respond-to(lg) {
+      align-items: center;
+    }
+  }
+
+  &__planet {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    @include background-planet-layer(
+      $earth,
+      center,
+      center,
+      contain,
+      no-repeat
+    );
+    top: -20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    @include respond-to(md) {
+      width: 350px;
+      height: 350px;
+      top: 50%;
+      left: calc(100% + -50px);
+      transform: translate(-50%, -50%);
+    }
+
+    @include respond-to(lg) {
+      position: static;
+      margin-left: auto;
+      transform: none;
+    }
+  }
+
+  &__info {
+    padding: 200px 0 36px 0;
+    text-align: center;
+
+    @include respond-to(md) {
+      padding: 125px 50px;
+      width: 65%;
+      text-align: left;
+    }
+  }
+
+  &__title {
+    margin-bottom: 10px;
+    color: $text-color;
+
+    @include font-style($font-size-heading-mdn, 800, center, 1);
+
+    @include respond-to(md) {
+      @include font-style($font-size-h1-sm, 800, left, 1);
+    }
+    @include respond-to(lg) {
+      @include font-style($font-size-h1-lg, 800, left, 1);
+    }
+  }
+
+  &__subtitle {
+    margin-bottom: 20px;
+    font-weight: 800;
+    color: $text-color;
+    font-size: $font-size-sm;
+
+    @include respond-to(md) {
+      font-size: $font-size-lgn;
+    }
+
+    @include respond-to(lg) {
+      font-size: $font-size-heading-md;
+    }
+  }
+
+  &__highlight {
+    color: $space-color;
+  }
+
+  &__emphasis {
+    color: $emphasis-color;
+  }
+
+  &__button {
+    @include button;
+    font-size: $font-size-sm;
+
+    @include respond-to(md) {
+      font-size: $font-size-lgn;
+    }
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+}
+
+.container {
+  padding: 0 50px;
+
+  @include container;
+}
+
+.offers {
+  padding-top: 2rem;
+  &__title {
+    margin-bottom: 1.5rem;
+    color: $text-color;
+
+    @include font-style($font-size-md, 700, left, normal);
+
+    @include respond-to(md) {
+      font-size: $font-size-xl;
+    }
+
+    @include respond-to(lg) {
+      font-size: $font-size-heading-md;
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: 1fr 1fr;
+
+      & > li {
+        grid-column: span 1;
+      }
+
+      & > li:nth-child(3n + 1) {
+        grid-column: span 2;
+      }
+    }
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    height: 100%;
+    padding: 2rem;
+    color: $text-color;
+    background: $highlight-color;
+    border-radius: 1rem;
+    box-shadow: $box-shadow-default;
+    flex-direction: column;
+
+    &--move {
+      @include background-layer($move);
+    }
+
+    &--space {
+      @include background-layer($space);
+    }
+
+    &--stars {
+      @include background-layer($stars);
+    }
+
+    &--dreams {
+      @include background-layer($dreams);
+    }
+  }
+
+
+  &__article {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  &__item-title {
+    margin-bottom: 1rem;
+    font-size: $font-size-heading-lg;
+    font-weight: 700;
+
+    @include respond-to(md) {
+      font-size: $font-size-heading-lg;
+    }
+
+    @include respond-to(lg) {
+      font-size: $font-size-heading-xl;
+    }
+  }
+
+  &__text-container {
+    margin-bottom: auto;
+  }
+
+  &__item-text {
+    margin-bottom: 1.5rem;
+    font-size: $font-size-sm;
+
+    @include respond-to(lg) {
+      font-size: $font-size-heading-sm;
+    }
+  }
+
+  &__item-button {
+    font-size: $font-size-sm;
+    @include button(
+      $text-color: $emphasis-color,
+      $bg-color: transparent,
+      $align: flex-start
+    );
+
+    @include respond-to(lg) {
+      font-size: $font-size-lgn;
+    }
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+}
+
+.journey {
+  padding: 2rem 0;
+
+  &__content {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    gap: 1rem;
+
+    @include container;
+  }
+
+  &__title {
+    margin-bottom: 0;
+    color: $text-color;
+
+    @include font-style($font-size-md, 700, start, normal);
+
+    @include respond-to(md) {
+      font-size: $font-size-xl;
+    }
+
+    @include respond-to(lg) {
+      font-size: $font-size-heading-md;
+    }
+  }
+
+  &__text {
+    position: relative;
+    max-height: 0;
+    margin: 0;
+    color: $text-color;
+    opacity: 0.6;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+
+    @include font-style($font-size-xs, 700, start, 1.5);
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+
+    @include respond-to(lg) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  &__checkbox {
+    display: none;
+
+    &:checked ~ .journey__text {
+      max-height: 20rem;
+    }
+
+    &:checked ~ .journey__link::after {
+      content: 'Read less';
+    }
+  }
+
+  &__link {
+    font-size: $font-size-xs;
+    text-align: start;
+    color: $emphasis-color;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    cursor: pointer;
+
+    &::after {
+      content: 'Read more';
+      display: inline-block;
+      pointer-events: auto;
+    }
+
+    &:hover,
+    &:hover::after,
+    &:focus::after {
+      opacity: 0.6;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    @include respond-to(md) {
+      font-size: $font-size-sm;
+    }
+
+    @include respond-to(lg) {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+.footer {
+  padding-bottom: 20px;
+  text-align: center;
+  background-color: $background-color;
+
+  &__content {
+    @include flex-center(column);
+  }
+
+  &__rocket {
+    width: 140px;
+  }
+
+  &__text {
+    font-size: $font-size-md;
+    color: $emphasis-color;
+    margin-top: -18px;
+  }
+}
